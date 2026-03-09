@@ -26,8 +26,8 @@
 
               {% if user.is_authenticated %}
                 <li>User: {{ user.get_username }}</li>
-                
-                <!-- Link para livros emprestados -->
+
+                <!-- Link para livros emprestados do usuário -->
                 <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
 
                 <li>
@@ -36,6 +36,17 @@
                     <button type="submit" class="btn btn-link">Logout</button>
                   </form>
                 </li>
+
+                <!-- Links apenas para staff -->
+                {% if user.is_staff %}
+                  <hr>
+                  <li>Staff</li>
+                  <li><a href="{% url 'all-borrowed' %}">All borrowed</a></li>
+                  {% if perms.catalog.add_author %}
+                    <li><a href="{% url 'author-create' %}">Create author</a></li>
+                  {% endif %}
+                {% endif %}
+
               {% else %}
                 <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
               {% endif %}

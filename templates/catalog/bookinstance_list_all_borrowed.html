@@ -1,0 +1,50 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>All Borrowed Books</h1>
+
+  {% if bookinstance_list %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Borrower</th>
+          <th>Status</th>
+          <th>Due back</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bookinst in bookinstance_list %}
+          <tr>
+            <td><a href="{{ bookinst.book.get_absolute_url }}">{{ bookinst.book.title }}</a></td>
+            <td>{{ bookinst.borrower }}</td>
+            <td>{{ bookinst.get_status_display }}</td>
+            <td>{{ bookinst.due_back }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% block pagination %}
+      {% if is_paginated %}
+        <div class="pagination">
+          <span class="page-links">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span class="page-current">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+          </span>
+        </div>
+      {% endif %}
+    {% endblock %}
+
+  {% else %}
+    <p>There are no borrowed books at the moment.</p>
+  {% endif %}
+
+{% endblock %}
